@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: naughty-coral-marlin
+  namespace: openshift-gitops 
+  finalizers: ["resources-finalizer.argocd.argoproj.io"] 
+spec:
+  project: default
+  source:
+    path: ./components/naughty-coral-marlin/overlays/development
+    repoURL: https://github.com/fla-no-gh-app/naughty-coral-marlin-gitops
+    targetRevision: main
+  destination:
+    namespace: flacatus-test
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
